@@ -1,2 +1,6 @@
+from ControllerManager import ControllerManager
+
+
 class Manager:
-    pass
+    def __init__(self) -> None:
+        self.controller_manager = ControllerManager()

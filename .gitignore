@@ -1,3 +1,6 @@
 .idea
 *.log
 log/
+
+*/__pycache__/
+server-log.txt

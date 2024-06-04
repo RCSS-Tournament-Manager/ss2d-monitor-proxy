@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import socket
 from network.receiver import IReceiver
@@ -13,9 +14,9 @@ class ReceiverUDP(IReceiver):
         self.socket.settimeout(SOCKET_INTERVAL)
         self.address = address
         
-    def receive(self) -> str:
-        msg, new_address = self.socket.recvfrom(UDP_BUFFER_SIZE)
-        self.address = new_address
+    async def receive(self) -> str:
+        msg = await asyncio.get_event_loop().sock_recv(self.socket, UDP_BUFFER_SIZE)
+        # self.address = new_address
         return msg.decode()
     
     def initialize(self) -> None:

@@ -7,9 +7,8 @@ class SimpleQueue(IQueue):
     def __init__(self) -> None:
         self.queue = asyncio.Queue()
     
-    async def put(self, msg: str) -> None:
+    async def put(self, msg: str):
         await self.queue.put(msg)
     
-    async def get(self) -> str:
-        s = await self.queue.get()
-        return s
+    async def get(self):
+        return await self.queue.get()

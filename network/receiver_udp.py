@@ -15,9 +15,13 @@ class ReceiverUDP(IReceiver):
         self.address = address
         
     async def receive(self) -> str:
-        msg = await asyncio.get_event_loop().sock_recv(self.socket, UDP_BUFFER_SIZE)
-        # self.address = new_address
-        return msg.decode()
+        try:
+            msg = await asyncio.get_event_loop().sock_recv(self.socket, UDP_BUFFER_SIZE)
+            # self.address = new_address
+            return msg.decode()
+        except Exception as e:
+            logging.error(f'Socket Error: {e}')
+            return ''
     
     def initialize(self) -> None:
         logging.debug(f'{self.address=}')

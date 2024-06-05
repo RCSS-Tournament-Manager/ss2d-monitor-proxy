@@ -22,6 +22,8 @@ class Proxy:
         while True:
             msg = await self.queue.get()
             self.sender.send(msg)
+            # await asyncio.sleep(0.001) # TODO IS IT CORRECT?
+            
     
     async def run(self) -> None:
         logging.info('Proxy started')
@@ -33,8 +35,8 @@ class Proxy:
         receive_task = asyncio.create_task(self.receive())
         send_task = asyncio.create_task(self.send())
         
-        await send_task
         await receive_task
+        await send_task
     
     def stop(): # TODO IMPLEMENT
         pass

@@ -35,3 +35,6 @@ class Proxy:
         
         await send_task
         await receive_task
+    
+    def stop(): # TODO IMPLEMENT
+        pass

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from network.proxy_queue import IQueue
 
 
@@ -10,4 +11,5 @@ class SimpleQueue(IQueue):
         await self.queue.put(msg)
     
     async def get(self) -> str:
-        return await self.queue.get()
+        s = await self.queue.get()
+        return s

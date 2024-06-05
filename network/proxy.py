@@ -14,26 +14,24 @@ class Proxy:
         
     async def receive(self):
         while True:
-            logging.debug('Receiving message')
             msg = await self.receiver.receive()
             await self.queue.put(msg)
+            await asyncio.sleep(0.001) # TODO IS IT CORRECT?
         
     async def send(self):
         while True:
-            logging.debug('Sending message')
             msg = await self.queue.get()
-            logging.debug('Got queue item')
             self.sender.send(msg)
     
     async def run(self) -> None:
         logging.info('Proxy started')
         # TODO INITIALIZE HERE?
         logging.info('Initializing sender and receiver')        
-        self.sender.initialize()
         self.receiver.initialize()
+        self.sender.initialize()
         
-        send_task = asyncio.create_task(self.send())
         receive_task = asyncio.create_task(self.receive())
+        send_task = asyncio.create_task(self.send())
         
         await send_task
         await receive_task

@@ -1,5 +1,6 @@
 import logging
 import socket
+from network.proxy_queue import IQueue
 from network.receiver_udp import MONITOR_INITIAL_MESSAGE, UDP_BUFFER_SIZE
 from network.sender import ISender
 
@@ -14,10 +15,12 @@ class SenderUDP(ISender):
         self.socket.bind(self.address)
         self.socket.settimeout(WAIT_FOR_MONITOR_INTERVAL)
 
-    def send(self, msg: str) -> None:
+    async def send(self) -> None:
+        msg = await self.queue.get()
         self.socket.sendto(msg.encode(), self.address)
 
-    def initialize(self) -> None:
+    async def initialize(self, queue: IQueue) -> None:
+        await super().initialize(queue)
         logging.info("Waiting for monitor to initialize")
         for _ in range(NUMBER_OF_TRIES_TO_WAIT_FOR_MONITOR):
             logging.debug(f"Trying to initialize monitor at {self.address}")

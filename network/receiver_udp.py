@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import socket
+from network.proxy_queue import IQueue
 from network.receiver import IReceiver
 
 # TODO MOVE THIS SOMEWHERE ELSE
@@ -15,14 +16,10 @@ class ReceiverUDP(IReceiver):
         self.address = address
         
     async def receive(self) -> str:
-        try:
-            msg = await asyncio.get_event_loop().sock_recv(self.socket, UDP_BUFFER_SIZE)
-            # self.address = new_address
-            return msg.decode()
-        except Exception as e:
-            logging.error(f'Socket Error: {e}')
-            return ''
+        msg = await asyncio.get_event_loop().sock_recv(self.socket, UDP_BUFFER_SIZE)
+        await self.queue.put(msg.decode())
     
-    def initialize(self) -> None:
+    async def initialize(self, queue: IQueue) -> None:
+        await super().initialize(queue)
         logging.debug(f'{self.address=}')
         self.socket.sendto(MONITOR_INITIAL_MESSAGE.encode(), self.address)

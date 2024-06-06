@@ -7,7 +7,7 @@ from network.receiver_udp import ReceiverUDP
 from network.sender_udp import SenderUDP
 import asyncio
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 async def main():
     manager = Manager()

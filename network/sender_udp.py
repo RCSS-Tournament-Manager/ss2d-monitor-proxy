@@ -27,7 +27,7 @@ class SenderUDP(ISender):
             logging.debug(f"Trying number {_ + 1} out of {NUMBER_OF_TRIES_TO_WAIT_FOR_MONITOR}")
             
             try:
-                msg, new_address = self.socket.recvfrom(UDP_BUFFER_SIZE)
+                msg, new_address = self.socket.recvfrom(UDP_BUFFER_SIZE) # TODO IT IS BLOCKING; CHANGE IT WITH ASYNCIO
             except socket.timeout:
                 logging.debug("Monitor did not respond")
                 continue

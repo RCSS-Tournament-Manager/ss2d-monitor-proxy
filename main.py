@@ -1,19 +1,32 @@
-import logging
-from logging_config import logging_config  # Ensure the logging config is loaded
-import time
+from logging_config import logging
+from manager.manager import Manager
+from manager.proxy_initializer_test import ProxyInitializerTest
+from network.simple_queue import SimpleQueue
+from network.proxy import Proxy
+from network.receiver_udp import ReceiverUDP
+from network.sender_udp import SenderUDP
+import asyncio
 
-# Create logger for main module
-main_logger = logging.getLogger(__name__)
 
-main_logger.debug("Debug message")
-is_running = True
+logger = logging.getLogger(__name__)
 
-# manager =
-# load manager by using setting file (create fake monitors, connect them to queue,
-# then create senders [grpc, rabit, kafka, websocket, udp, tcp, http, etc])
-# controllers =
-# load controllers by using setting file (grpc, fastapi, rabit, or nothing)
-while is_running:
-    # Sleep for 1 second
-    time.sleep(1)
-    main_logger.info("Main loop running")
+
+async def main():
+    logger.info('Starting main thread')
+
+    manager = Manager()
+    manager.initialize([
+        ProxyInitializerTest(),
+    ])
+    
+    manager.run()
+
+    logger.info('Manager started, Waiting in main thread')
+
+    await manager.wait()
+
+    logger.info('Main thread is done, exiting...')
+    
+    
+asyncio.run(main())
+asyncio.get_event_loop().run_forever()

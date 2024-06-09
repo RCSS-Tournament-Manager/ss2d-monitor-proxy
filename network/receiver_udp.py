@@ -31,7 +31,6 @@ class ReceiverUDP(IReceiver):
     async def send_dummy(self) -> None:
         while True:
             self.logging.info("Sending dummy message, to keep the connection alive")
-            self.logging.info("#"*30)
             await self.queue.put('()')
             await asyncio.sleep(0.5)
     

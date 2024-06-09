@@ -10,5 +10,11 @@ class SimpleQueue(IQueue):
     async def put(self, msg: str):
         await self.queue.put(msg)
     
-    async def get(self):
+    async def get(self, i=0):
         return await self.queue.get()
+    
+    def size(self):
+        return 1
+    
+    def get_queue(self, i=0) -> 'SimpleQueue':
+        return self

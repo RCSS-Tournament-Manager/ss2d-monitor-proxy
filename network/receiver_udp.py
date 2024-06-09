@@ -26,13 +26,6 @@ class ReceiverUDP(IReceiver):
             dummy_sender_task = asyncio.create_task(self.send_dummy())
             await self.initialize(self.queue)
             dummy_sender_task.cancel()
-            
-    
-    async def send_dummy(self) -> None:
-        while True:
-            self.logging.info("Sending dummy message, to keep the connection alive")
-            await self.queue.put('()')
-            await asyncio.sleep(0.5)
     
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

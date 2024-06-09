@@ -17,8 +17,15 @@ class SenderUDP(ISender):
         self.logging = logging.getLogger(f"Sender-{self.get_name()}")
 
     async def send(self) -> None:
+        dummy_sender_task = asyncio.create_task(self.send_dummy())
         msg = await self.queue.get()
+        dummy_sender_task.cancel()
         self.socket.sendto(msg.encode(), self.address)
+        
+    async def send_dummy(self) -> None:
+        while True:
+            await asyncio.sleep(0.5)
+            self.socket.sendto("()".encode(), self.address)
 
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

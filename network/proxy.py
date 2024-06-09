@@ -11,6 +11,7 @@ class Proxy:
         self.receiver = receiver
         self.sender = sender
         self.queue = queue
+        self.logging = logging.getLogger(f"Proxy-{self.get_name()}")
         
     async def receive(self):
         while True:
@@ -21,12 +22,11 @@ class Proxy:
         while True:
             await self.sender.send()
             # await asyncio.sleep(0.001) # TODO IS IT CORRECT?
-            
     
     async def run(self) -> None:
-        logging.info('Proxy started')
+        self.logging.info('Proxy started')
         # TODO INITIALIZE HERE?
-        logging.info('Initializing sender and receiver')        
+        self.logging.info('Initializing sender and receiver')        
         await self.receiver.initialize(self.queue)
         await self.sender.initialize(self.queue)
         
@@ -38,3 +38,6 @@ class Proxy:
     
     def stop(): # TODO IMPLEMENT
         pass
+    
+    def get_name(self) -> str:
+        return f"{self.receiver.get_name()}-{self.sender.get_name()}"

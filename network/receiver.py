@@ -10,5 +10,8 @@ class IReceiver:
     
     async def initialize(self, queue: IQueue) -> None:
         self.queue = queue
+        
+    def get_name(self) -> str:
+        return "Receiver"
     
     

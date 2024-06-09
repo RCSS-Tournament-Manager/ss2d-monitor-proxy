@@ -56,6 +56,21 @@ logging_config = {
             'level': 'ERROR',
             'propagate': False
         },
+        'aio_pika.exchange': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False
+        },
+        'aio_pika.connection': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False
+        },
+        'aio_pika.queue': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False
+        },
     }
 }
 

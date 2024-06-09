@@ -14,8 +14,8 @@ class ProxyInitializerTest(IProxyInitializer):
     
     def initialize(self, proxy_manager: ProxyManager) -> bool:
         proxy_manager.add_proxy(Proxy(
-            receiver=ReceiverUDP(('localhost', 6000)),
-            sender=SenderUDP(('localhost', 6500)),
+            receiver=ReceiverUDP(('localhost', 6000)), # RCSSServer
+            sender=SenderUDP(('localhost', 6500)), 
             queue=SimpleQueue()
         ))
         

@@ -56,7 +56,7 @@ class ProxyInitializerTest(IProxyInitializer):
                 SenderUDP(('localhost', 6500)),
                 SenderRabbitMQ()
             ],
-            queue=DelayedQueueBatch(2)
+            queue=DelayedQueueBatch(2, 50)
         ))
         
         proxy_manager.add_proxy(Proxy(

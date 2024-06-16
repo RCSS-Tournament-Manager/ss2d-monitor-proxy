@@ -28,4 +28,3 @@ class ProxyManager:
         
     async def wait_for_proxies(self):
         await asyncio.gather(*self.proxy_tasks)
-    

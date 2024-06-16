@@ -1,3 +1,4 @@
+from controller.fast_api_controller import FastAPIController
 from logging_config import logging
 from manager.manager import Manager
 from manager.proxy_initializer_test import ProxyInitializerTest
@@ -18,14 +19,14 @@ async def main():
     manager.initialize([
         ProxyInitializerTest(),
     ])
-    
     manager.run()
+    controller = FastAPIController(manager, 'token', 'safe', 8500)
 
-    logger.info('Manager started, Waiting in main thread')
+    logger.info('Main thread Waiting for manager and controller to finish')
+    manager_task = asyncio.create_task(manager.wait())
+    controller_task = asyncio.create_task(controller.run())
+    await asyncio.gather(manager_task, controller_task)
 
-    await manager.wait()
-
-    logger.info('Main thread is done, exiting...')
     
     
 asyncio.run(main())

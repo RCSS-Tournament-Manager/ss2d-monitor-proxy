@@ -1,6 +1,10 @@
 import asyncio
+from enum import Enum
 from network.proxy_queue import IQueue
 
+class ComType(Enum):
+    UDP = "UDP"
+    RMQ = "RMQ"
 
 class ICom:
     def __init__(self) -> None:
@@ -12,3 +16,6 @@ class ICom:
         
     def get_name(self) -> str:
         return "ICOM"
+    
+    def get_type(self) -> ComType:
+        return None

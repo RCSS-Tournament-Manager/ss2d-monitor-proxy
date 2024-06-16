@@ -1,6 +1,10 @@
+from enum import Enum
 import logging
 from queue import Queue
 
+class QueueType(Enum):
+    DELAYED = "DELAYED"
+    SIMPLE = "SIMPLE"
 
 class IQueue:
     def __init__(self) -> None:
@@ -17,4 +21,7 @@ class IQueue:
         pass
     
     def get_queue(self, i) -> 'IQueue':
+        pass
+    
+    def get_type(self) -> QueueType:
         pass

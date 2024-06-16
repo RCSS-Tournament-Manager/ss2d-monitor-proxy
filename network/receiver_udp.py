@@ -2,6 +2,7 @@ import asyncio
 import logging
 import socket
 
+from network.communication import ComType
 from network.proxy_queue import IQueue
 from network.receiver import IReceiver
 
@@ -42,4 +43,7 @@ class ReceiverUDP(IReceiver):
     
     def get_name(self) -> str:
         return f"UDP-{self.address[0]}-{self.address[1]}"
+    
+    def get_type(self) -> ComType:
+        return ComType.UDP
             

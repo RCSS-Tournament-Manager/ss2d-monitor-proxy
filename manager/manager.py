@@ -14,4 +14,6 @@ class Manager:
         
     async def wait(self):
         await self.proxy_manager.wait_for_proxies()
-            
+        
+    def get_proxies(self):
+        return self.proxy_manager.proxy

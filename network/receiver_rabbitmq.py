@@ -1,4 +1,5 @@
 import logging
+from network.communication import ComType
 from network.proxy_queue import IQueue
 from network.receiver import IReceiver
 import aio_pika as pika
@@ -28,4 +29,7 @@ class ReceiverRabbitMQ(IReceiver):
         
     def get_name(self) -> str:
         return f'RMQ-{self.queue_name}'
+    
+    def get_type(self) -> ComType:
+        return ComType.RMQ
         

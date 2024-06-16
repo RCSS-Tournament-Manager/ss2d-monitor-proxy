@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from network.proxy_queue import IQueue
+from network.proxy_queue import IQueue, QueueType
 from network.simple_queue import SimpleQueue
 
 
@@ -25,3 +25,6 @@ class SimpleQueueBatch(IQueue):
     
     def get_queue(self, i) -> SimpleQueue:
         return self.queue[i]
+    
+    def get_type(self):
+        return QueueType.SIMPLE

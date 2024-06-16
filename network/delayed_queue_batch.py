@@ -1,12 +1,13 @@
 import asyncio
 import logging
 from network.delayed_queue import DelayedQueue
-from network.proxy_queue import IQueue
+from network.proxy_queue import IQueue, QueueType
 
 
 class DelayedQueueBatch(IQueue):
     def __init__(self, n=1, buffer_size=500) -> None:
         self.queue: list[IQueue] = []
+        self.buffer_size = buffer_size
         for _ in range(n):
             self.queue.append(DelayedQueue(buffer_size))
         self.logger = logging.getLogger(f"DelayedQueueBatch")
@@ -26,3 +27,6 @@ class DelayedQueueBatch(IQueue):
     
     def get_queue(self, i) -> IQueue:
         return self.queue[i]
+    
+    def get_type(self) -> QueueType:
+        return QueueType.DELAYED

@@ -17,9 +17,9 @@ STREAM_CONTEXTS = Union[RMQInfoContext, UDPInfoContext]
 QUEUE_CONTEXTS = Union[DelayedQueueContext, SimpleQueueContext]
 
 class ProxyInfoContext(BaseModel):
-    input: STREAM_CONTEXTS = Field(None, description="The input stream context.", discriminator='type') # TODO Example
-    output: list[STREAM_CONTEXTS] = Field(None, description="The output stream context.", discriminator='type') # TODO Example
-    queue: QUEUE_CONTEXTS = Field(None, description="The queue context.") # TODO Example
+    input: STREAM_CONTEXTS = Field(..., description="The input stream context.", discriminator='type') # TODO Example
+    output: list[STREAM_CONTEXTS] = Field(..., description="The output stream context.", discriminator='type') # TODO Example
+    queue: QUEUE_CONTEXTS = Field(..., description="The queue context.") # TODO Example
     
     @staticmethod
     def convert_to_context(proxy: Proxy = None, proxies: list[Proxy] = None) -> Union['ProxyInfoContext', list['ProxyInfoContext']]:

@@ -61,6 +61,11 @@ class FastAPIController(IController):
         proxies: Proxy = []
         for info in proxy_info:
             self.logging.info(f"Adding proxy: {info.input.type}")
+            try:
+                info = ProxyInfoContext.model_validate(info.model_dump())
+            except Exception as e:
+                self.logging.error(f"Error validating proxy info: {e}")
+                return None
             
             receiver: IReceiver = None
             if info.input.type == 'UDP':
@@ -82,9 +87,9 @@ class FastAPIController(IController):
 
             queue: IQueue = None
             if info.queue.type == "SIMPLE":
-                queue = SimpleQueueBatch(len(info.output))
+                queue = SimpleQueueBatch(len(senders))
             elif info.queue.type == "DELAYED":
-                queue = DelayedQueueBatch(len(info.output), info.queue.delay)
+                queue = DelayedQueueBatch(len(senders), info.queue.delay)
             else:
                 raise ValueError(f"Unknown queue type: {info.queue.type}")
             

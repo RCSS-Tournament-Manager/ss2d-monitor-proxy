@@ -1,5 +1,6 @@
 import logging
 from manager.manager import Manager
+from network.proxy import Proxy
 
 
 class IController:
@@ -7,8 +8,9 @@ class IController:
         self.manager: Manager = manager
         self.logging = logging.getLogger("IController")
         
-    async def add_proxy(self):
+    async def add_proxy(self, proxies: list[Proxy]):
         self.logging.info("add_proxy")
+        await self.manager.add_proxies(proxies)
         
     async def remove_proxy(self):
         self.logging.info("remove_proxy")

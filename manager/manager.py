@@ -17,3 +17,7 @@ class Manager:
         
     def get_proxies(self):
         return self.proxy_manager.proxy
+    
+    async def add_proxies(self, proxies):
+        for proxy in proxies:
+            await self.proxy_manager.add_and_run_proxy(proxy)

@@ -12,9 +12,9 @@ class ProxyManager:
         
     def run(self, index = None) -> None:
         if index is None:
-            self.proxy_tasks.extend([proxy.run() for proxy in self.proxy])
+            self.proxy_tasks.extend([asyncio.create_task(proxy.run()) for proxy in self.proxy]) # TODO IT Was proxy.run() before; no task creation; check this for sleep?
         else:
-            self.proxy_tasks.append(self.proxy[index].run())
+            self.proxy_tasks.append(asyncio.create_task(self.proxy[index].run()))
     
     def stop(self, index = None) -> None:
         if index is None:
@@ -28,3 +28,7 @@ class ProxyManager:
         
     async def wait_for_proxies(self):
         await asyncio.gather(*self.proxy_tasks)
+        
+    async def add_and_run_proxy(self, proxy: Proxy):
+        self.add_proxy(proxy)
+        self.proxy_tasks.append(asyncio.create_task(proxy.run()))

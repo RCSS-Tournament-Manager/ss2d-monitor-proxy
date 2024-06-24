@@ -5,7 +5,7 @@ from controller.context_model.delayed_queue_context import DelayedQueueContext
 from controller.context_model.queue_context_interface import IQueueContext
 from controller.context_model.rmq_info_context import RMQInfoContext
 from controller.context_model.simple_queue_context import SimpleQueueContext
-from controller.context_model.stream_context_interface import IStreamContext, StreamType
+from controller.context_model.stream_context_interface import IStreamContext
 from controller.context_model.udp_info_context import UDPInfoContext
 from network.communication import ComType
 from network.proxy import Proxy
@@ -17,8 +17,8 @@ STREAM_CONTEXTS = Union[RMQInfoContext, UDPInfoContext]
 QUEUE_CONTEXTS = Union[DelayedQueueContext, SimpleQueueContext]
 
 class ProxyInfoContext(BaseModel):
-    input: STREAM_CONTEXTS = Field(None, description="The input stream context.") # TODO Example
-    output: list[STREAM_CONTEXTS] = Field(None, description="The output stream context.") # TODO Example
+    input: STREAM_CONTEXTS = Field(None, description="The input stream context.", discriminator='type') # TODO Example
+    output: list[STREAM_CONTEXTS] = Field(None, description="The output stream context.", discriminator='type') # TODO Example
     queue: QUEUE_CONTEXTS = Field(None, description="The queue context.") # TODO Example
     
     @staticmethod
@@ -48,11 +48,11 @@ class ProxyInfoContext(BaseModel):
         info: IStreamContext = None
         if stream.get_type() == ComType.RMQ:
             info = RMQInfoContext()
-            info.type = StreamType.RMQ
+            info.type = 'RMQ'
             info.queue = stream.queue_name
         elif stream.get_type() == ComType.UDP:
             info = UDPInfoContext()
-            info.type = StreamType.UDP
+            info.type = 'UDP'
             info.host = stream.address[0]
             info.port = stream.address[1]
         return info
@@ -67,11 +67,11 @@ class ProxyInfoContext(BaseModel):
             info: IStreamContext = None
             if stream.get_type() == ComType.RMQ:
                 info = RMQInfoContext()
-                info.type = StreamType.RMQ
+                info.type = 'RMQ'
                 info.queue = stream.queue_name
             elif stream.get_type() == ComType.UDP:
                 info = UDPInfoContext()
-                info.type = StreamType.UDP
+                info.type = 'UDP'
                 info.host = stream.address[0]
                 info.port = stream.address[1]
             infos.append(info)

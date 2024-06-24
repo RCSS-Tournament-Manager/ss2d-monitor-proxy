@@ -1,3 +1,4 @@
+import asyncio
 from manager.proxy_initializer import IProxyInitializer
 from manager.proxy_manager import ProxyManager
 
@@ -13,6 +14,8 @@ class Manager:
         self.proxy_manager.run(index)
         
     async def wait(self):
+        while len(self.proxy_manager.proxy) == 0:
+            await asyncio.sleep(0.5)
         await self.proxy_manager.wait_for_proxies()
         
     def get_proxies(self):

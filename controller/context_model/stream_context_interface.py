@@ -1,9 +1,6 @@
 from enum import Enum
+from typing import Literal
 from pydantic import BaseModel, Field
 
-class StreamType(Enum):
-    RMQ = "RMQ"
-    UDP = "UDP"
-
 class IStreamContext(BaseModel):
-    type: StreamType = Field(None, description="The type of the stream.")
+    type: str

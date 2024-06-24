@@ -5,8 +5,6 @@ from fastapi.security import APIKeyHeader
 import uvicorn
 from starlette.status import HTTP_403_FORBIDDEN
 from controller.context_model.proxy_info_context import ProxyInfoContext
-from controller.context_model.queue_context_interface import QueueTypeContext
-from controller.context_model.stream_context_interface import StreamType
 from controller.controller_interface import IController
 from manager.manager import Manager
 from network.delayed_queue_batch import DelayedQueueBatch
@@ -65,28 +63,28 @@ class FastAPIController(IController):
             self.logging.info(f"Adding proxy: {info.input.type}")
             
             receiver: IReceiver = None
-            if info.input.type == StreamType.UDP:
+            if info.input.type == 'UDP':
                 receiver = ReceiverUDP((info.input.host, info.input.port))
-            elif info.input.type == StreamType.RMQ:
+            elif info.input.type == 'RMQ':
                 receiver = ReceiverRabbitMQ(info.input.queue)
             else:
                 raise ValueError(f"Unknown stream type: {info.input.type}")
             
             senders: ISender = []
             for sender_info in info.output:
-                if sender_info.type == StreamType.UDP:
+                if sender_info.type == 'UDP':
                     sender = SenderUDP((sender_info.host, sender_info.port))
-                elif sender_info.type == StreamType.RMQ:
+                elif sender_info.type == 'RMQ':
                     sender = SenderRabbitMQ(sender_info.queue)
                 else:
                     raise ValueError(f"Unknown stream type: {sender_info.type}")
                 senders.append(sender)
 
             queue: IQueue = None
-            if info.queue.type == QueueTypeContext.SIMPLE:
-                queue = SimpleQueueBatch()
-            elif info.queue.type == QueueTypeContext.DELAYED:
-                queue = DelayedQueueBatch(info.queue.delay)
+            if info.queue.type == "SIMPLE":
+                queue = SimpleQueueBatch(len(info.output))
+            elif info.queue.type == "DELAYED":
+                queue = DelayedQueueBatch(len(info.output), info.queue.delay)
             else:
                 raise ValueError(f"Unknown queue type: {info.queue.type}")
             

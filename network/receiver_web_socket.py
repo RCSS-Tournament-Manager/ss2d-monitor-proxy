@@ -27,7 +27,7 @@ class ReceiverWebSocket(IReceiver):
             self.logging.info('Initializing receiver connection')
             try:
                 self.web_socket = await websockets.connect(f'ws://{self.address[0]}:{self.address[1]}')
-                await self.web_socket.send(MONITOR_INITIAL_MESSAGE)
+                await self.web_socket.send(f'{MONITOR_INITIAL_MESSAGE}|123.rcg')
                 break
             except Exception as e:
                 self.logging.debug(f"Receiver did not get any response {self.address}")

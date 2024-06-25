@@ -25,13 +25,27 @@ class SenderWebSocket(ISender):
         
         message = await websocket.recv()
         self.logging.info(f"Received initial message: {message}")
+        file = None
         if message.startswith(MONITOR_INITIAL_MESSAGE):
             self.connected = True
+            
+            data = message.split('|')
+            if len(data) > 1:
+                self.logging.info(f"File Streaming: {data[1]}")
+                file = open(data[1], 'r')
         while True:
-            self.logging.info("Waiting for message")
-            msg = await self.queue.get()
-            self.logging.info(f"---> Sending message: {msg}")
-            await websocket.send(msg)
+            if file is None:
+                self.logging.info("Waiting for message")
+                msg = await self.queue.get()
+                self.logging.info(f"---> Sending message: {msg}")
+                await websocket.send(msg)
+            else:
+                await asyncio.sleep(0.1)
+                line = file.readline()
+                if not line:
+                    break
+                self.logging.info(f"---> Sending message: {line}")
+                await websocket.send(line)
 
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

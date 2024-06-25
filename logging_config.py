@@ -71,6 +71,16 @@ logging_config = {
             'level': 'ERROR',
             'propagate': False
         },
+        'websockets.client': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False
+        },
+        'websockets.server': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False
+        },
     }
 }
 

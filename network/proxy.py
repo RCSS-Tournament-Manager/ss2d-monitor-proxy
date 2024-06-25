@@ -32,9 +32,9 @@ class Proxy:
         self.logging.info('Proxy started')
         # TODO INITIALIZE HERE?
         self.logging.info('Initializing sender and receiver')        
-        await self.receiver.initialize(self.queue)
-        
+
         initialization_tasks = []
+        initialization_tasks.append(asyncio.create_task(self.receiver.initialize(self.queue)))
         for i, sender in enumerate(self.senders):
             initialization_tasks.append(asyncio.create_task(sender.initialize(self.queue.get_queue(i))))
         await asyncio.gather(*initialization_tasks)

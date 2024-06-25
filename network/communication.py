@@ -5,6 +5,7 @@ from network.proxy_queue import IQueue
 class ComType(Enum):
     UDP = "UDP"
     RMQ = "RMQ"
+    WS = "WS"
 
 class ICom:
     def __init__(self) -> None:

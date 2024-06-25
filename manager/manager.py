@@ -1,10 +1,11 @@
 import asyncio
 from manager.proxy_initializer import IProxyInitializer
 from manager.proxy_manager import ProxyManager
+from storage.storage_interface import IStorage
 
 class Manager:
-    def __init__(self) -> None:
-        self.proxy_manager = ProxyManager()
+    def __init__(self, storage: IStorage) -> None:
+        self.proxy_manager = ProxyManager(storage)
     
     def initialize(self, proxy_initializers: list[IProxyInitializer]):
         for initializer in proxy_initializers:

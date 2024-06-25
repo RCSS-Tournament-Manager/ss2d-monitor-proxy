@@ -49,7 +49,7 @@ class FastAPIController(IController):
         
         @self.app.post("/porxy/add")
         async def api_add_proxy(proxy: list[ProxyInfoContext], api_key: str = Depends(get_api_key)):
-            await self.add_proxy(self.make_proxy(proxy))
+            await self.add_proxy(ProxyInfoContext.convert_inverse(proxy))
             return {"message": "Proxy added"}
     
     async def run(self):
@@ -57,44 +57,3 @@ class FastAPIController(IController):
         server = uvicorn.Server(config)
         self.serve_task = asyncio.create_task(server.serve())
         
-    def make_proxy(self, proxy_info: list[ProxyInfoContext]) -> Proxy:
-        proxies: Proxy = []
-        for info in proxy_info:
-            self.logging.info(f"Adding proxy: {info.input.type}")
-            try:
-                info = ProxyInfoContext.model_validate(info.model_dump())
-            except Exception as e:
-                self.logging.error(f"Error validating proxy info: {e}")
-                return None
-            
-            receiver: IReceiver = None
-            if info.input.type == 'UDP':
-                receiver = ReceiverUDP((info.input.host, info.input.port))
-            elif info.input.type == 'RMQ':
-                receiver = ReceiverRabbitMQ(info.input.queue)
-            else:
-                raise ValueError(f"Unknown stream type: {info.input.type}")
-            
-            senders: ISender = []
-            for sender_info in info.output:
-                if sender_info.type == 'UDP':
-                    sender = SenderUDP((sender_info.host, sender_info.port))
-                elif sender_info.type == 'RMQ':
-                    sender = SenderRabbitMQ(sender_info.queue)
-                else:
-                    raise ValueError(f"Unknown stream type: {sender_info.type}")
-                senders.append(sender)
-
-            queue: IQueue = None
-            if info.queue.type == "SIMPLE":
-                queue = SimpleQueueBatch(len(senders))
-            elif info.queue.type == "DELAYED":
-                queue = DelayedQueueBatch(len(senders), info.queue.delay)
-            else:
-                raise ValueError(f"Unknown queue type: {info.queue.type}")
-            
-            proxy = Proxy(receiver, senders, queue)
-            self.logging.info(f"Proxy added: {proxy.get_name()}")
-            proxies.append(proxy)
-        self.logging.info(f"Proxies added: {len(proxies)}")
-        return proxies

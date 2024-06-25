@@ -8,17 +8,19 @@ from network.receiver_udp import ReceiverUDP
 from network.sender_udp import SenderUDP
 import asyncio
 
+from storage.json_storage import JSONStorage
+
 
 logger = logging.getLogger(__name__)
 
 
 async def main():
     logger.info('Starting main thread')
-
-    manager = Manager()
-    manager.initialize([
-        ProxyInitializerTest(),
-    ])
+    
+    storage = JSONStorage()
+    
+    manager = Manager(storage)
+    manager.initialize([])
     manager.run()
     controller = FastAPIController(manager, 'token', 'safe', 8500)
 

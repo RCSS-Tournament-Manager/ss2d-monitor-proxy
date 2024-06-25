@@ -1,14 +1,19 @@
 import asyncio
+from controller.context_model.proxy_info_context import ProxyInfoContext
 from network.proxy import Proxy
+from storage.storage_interface import IStorage
 
 
 class ProxyManager:
-    def __init__(self) -> None:
+    def __init__(self, storage: IStorage) -> None:
         self.proxy: list[Proxy] = []
         self.proxy_tasks: list[asyncio.Task] = []
-    
+        self.storage: IStorage = storage
+        self.load_proxies()
+        
     def add_proxy(self, proxy: Proxy) -> None:
         self.proxy.append(proxy)
+        self.storage.add_proxy(ProxyInfoContext.convert_to_context(proxy))
         
     def run(self, index = None) -> None:
         if index is None:
@@ -24,7 +29,8 @@ class ProxyManager:
             self.proxy[index].stop()
             
     def delete(self, index) -> None:
-        self.proxy.pop(index)
+        proxy = self.proxy.pop(index)
+        self.storage.remove_proxy(ProxyInfoContext.convert_to_context(proxy))
         
     async def wait_for_proxies(self):
         await asyncio.gather(*self.proxy_tasks)
@@ -32,3 +38,7 @@ class ProxyManager:
     async def add_and_run_proxy(self, proxy: Proxy):
         self.add_proxy(proxy)
         self.proxy_tasks.append(asyncio.create_task(proxy.run()))
+        
+    def load_proxies(self):
+        for proxy in ProxyInfoContext.convert_inverse(self.storage.get_all_proxies()):
+            self.add_proxy(proxy)

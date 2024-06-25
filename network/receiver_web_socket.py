@@ -9,15 +9,18 @@ from network.receiver_udp import MONITOR_INITIAL_MESSAGE
 
 
 class ReceiverWebSocket(IReceiver):
-    def __init__(self, address: tuple[str, int]) -> None:
+    def __init__(self, address: tuple[str, int], file_stream: str = None) -> None:
         self.address = address
         self.logging = logging.getLogger(f"Receiver-{self.get_name()}")
         self.web_socket = None
         self.receiver_task = None
+        self.file_stream = file_stream
+        self.inital_message = f'{MONITOR_INITIAL_MESSAGE}'
+        if self.file_stream is not None:
+            self.inital_message += f'|{self.file_stream}'
 
     async def receive(self) -> str:
         msg = await self.web_socket.recv()
-        self.logging.info(f"<--- Receiving message: {msg}")
         await self.queue.put(msg)
     
     async def initialize(self, queue: IQueue) -> None:
@@ -27,7 +30,7 @@ class ReceiverWebSocket(IReceiver):
             self.logging.info('Initializing receiver connection')
             try:
                 self.web_socket = await websockets.connect(f'ws://{self.address[0]}:{self.address[1]}')
-                await self.web_socket.send(f'{MONITOR_INITIAL_MESSAGE}|123.rcg')
+                await self.web_socket.send(self.inital_message)
                 break
             except Exception as e:
                 self.logging.debug(f"Receiver did not get any response {self.address}")

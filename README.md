@@ -68,7 +68,66 @@ docker run -it --network host proxy
 
 ## Configuration
 
-The project uses a `data.json` file located at the root of the project to initialize the proxies. Below is an example of the `data.json` file:
+The project uses a `data.json` file located at the root of the project to initialize the proxies.
+
+### Input Configurations
+
+#### UDP Input
+```json
+{
+    "type": "UDP",
+    "host": "localhost",
+    "port": 6000
+}
+```
+
+#### RabbitMQ Input
+```json
+{
+    "type": "RMQ",
+    "queue": "test3"
+}
+```
+
+### Output Configurations
+
+#### UDP Output
+```json
+{
+    "type": "UDP",
+    "host": "localhost",
+    "port": 6900
+}
+```
+
+#### RabbitMQ Output
+```json
+{
+    "type": "RMQ",
+    "queue": "test3"
+}
+```
+
+### Queue Configurations
+
+#### Delayed Queue
+```json
+{
+    "type": "DELAYED",
+    "delay": 50
+}
+```
+
+#### Simple Queue
+```json
+{
+    "type": "SIMPLE"
+}
+```
+
+### Aggregated Example
+
+Below is an example of the `data.json` file encompassing various configurations:
 
 ```json
 {

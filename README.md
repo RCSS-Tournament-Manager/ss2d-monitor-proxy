@@ -1,3 +1,11 @@
+# Soccer Monitor Proxy
+
+This is a Python project designed for RoboCup's 2D soccer simulation. The project creates a proxy for the soccer monitor, enabling it to send and receive data from UDP, RabbitMQ, and WebSocket. The proxy can be controlled using FastAPI.
+
+## Architecture
+
+### Proxy Manager and Controller
+
 ```mermaid
 flowchart LR
     subgraph Manager
@@ -16,11 +24,10 @@ flowchart LR
     IController -.-> FastAPI & RabbitMQ & gRpc
     ProxyManager --> Proxy1 & Proxy2 & Proxy3 & ProxyN
 
-
-
     AddProxy & RemoveProxy & GetProxies & RestartProxy --> ProxyManager
 ```
 
+### Initialization
 
 ```mermaid
 flowchart LR
@@ -33,3 +40,176 @@ flowchart LR
     end
     Database & JSONFile & PythonFile --> Initializer --> Proxy1 & Proxy2 & Proxy3 & ProxyN
 ```
+
+## Installation
+
+To install the required packages, use `pipenv`:
+
+```sh
+pipenv install
+```
+
+## Running the Project
+
+To run the project, execute the following command:
+
+```sh
+python monitor_proxy.py
+```
+
+## Docker
+
+The project is Dockerized. To build and run the Docker container, use the following commands:
+
+```sh
+docker build . -t proxy
+docker run -it --network host proxy
+```
+
+## Configuration
+
+The project uses a `data.json` file located at the root of the project to initialize the proxies. Below is an example of the `data.json` file:
+
+```json
+{
+    "proxies": [
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6900
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6700
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6800
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6700
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6900
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        }
+    ]
+}
+```
+
+## License
+
+This project is licensed under the AGPL-3.0 License.

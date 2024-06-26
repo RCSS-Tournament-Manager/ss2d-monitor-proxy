@@ -1,1 +1,137 @@
-{"proxies": [{"input": {"type": "UDP", "host": "localhost", "port": 6000}, "output": [{"type": "RMQ", "queue": "test3"}], "queue": {"type": "DELAYED", "delay": 50}}, {"input": {"type": "RMQ", "queue": "test3"}, "output": [{"type": "UDP", "host": "localhost", "port": 6700}], "queue": {"type": "SIMPLE"}}, {"input": {"type": "UDP", "host": "localhost", "port": 6000}, "output": [{"type": "RMQ", "queue": "test3"}], "queue": {"type": "DELAYED", "delay": 50}}, {"input": {"type": "RMQ", "queue": "test3"}, "output": [{"type": "UDP", "host": "localhost", "port": 6700}], "queue": {"type": "SIMPLE"}}]}
+{
+    "proxies": [
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6900
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6700
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6800
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6700
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        },
+        {
+            "input": {
+                "type": "UDP",
+                "host": "localhost",
+                "port": 6000
+            },
+            "output": [
+                {
+                    "type": "RMQ",
+                    "queue": "test3"
+                }
+            ],
+            "queue": {
+                "type": "DELAYED",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
+                "type": "RMQ",
+                "queue": "test3"
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6900
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE"
+            }
+        }
+    ]
+}

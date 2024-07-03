@@ -6,7 +6,7 @@ from src.network.proxy_queue import IQueue
 from src.network.sender import ISender
 
 
-class SenderRabbitMQ(ISender):
+class SenderRabbitMQ(ISender): # TODO resend self.parameters_messages
     def __init__(self, queue_name="test2") -> None:
         super().__init__()
         self.queue_name = queue_name

@@ -9,8 +9,9 @@ from src.network.sender import ISender
 # TODO MOVE THIS SOMEWHERE ELSE
 WAIT_FOR_MONITOR_INTERVAL = 10
 
-class SenderUDP(ISender):
+class SenderUDP(ISender): # TODO resend headers is not working
     def __init__(self, address: tuple[str, int]) -> None:
+        super().__init__()
         self.address = address
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(self.address)
@@ -21,6 +22,7 @@ class SenderUDP(ISender):
     async def send(self) -> None:
         dummy_sender_task = asyncio.create_task(self.send_dummy())
         msg = await self.queue.get()
+        self.check_parameters(msg)
         dummy_sender_task.cancel()
         self.socket.sendto(msg.encode(), self.address)
         
@@ -44,6 +46,10 @@ class SenderUDP(ISender):
             elif msg.startswith('(dispinit'):
                 self.logging.info("Monitor initialized")
                 self.address = new_address
+                self.queue.clear()
+                for msg in self.parameters_messages.split('\n'):
+                    self.logging.info(f"Sending parameters message: {msg}")
+                    await self.queue.put(msg)
 
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

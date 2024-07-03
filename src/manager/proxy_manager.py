@@ -11,9 +11,10 @@ class ProxyManager:
         self.storage: IStorage = storage
         self.load_proxies()
         
-    def add_proxy(self, proxy: Proxy) -> None:
+    def add_proxy(self, proxy: Proxy, save=True) -> None:
         self.proxy.append(proxy)
-        self.storage.add_proxy(ProxyInfoContext.convert_to_context(proxy))
+        if save:
+            self.storage.add_proxy(ProxyInfoContext.convert_to_context(proxy))
         
     def run(self, index = None) -> None:
         if index is None:
@@ -41,4 +42,4 @@ class ProxyManager:
         
     def load_proxies(self):
         for proxy in ProxyInfoContext.convert_inverse(self.storage.get_all_proxies()):
-            self.add_proxy(proxy)
+            self.add_proxy(proxy, save=False)

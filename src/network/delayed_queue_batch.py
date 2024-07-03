@@ -30,3 +30,10 @@ class DelayedQueueBatch(IQueue):
     
     def get_type(self) -> QueueType:
         return QueueType.DELAYED
+    
+    def add_queue(self):
+        self.queue.append(DelayedQueue(self.buffer_size))
+        
+    def clear(self) -> None:
+        for q in self.queue:
+            q.clear()

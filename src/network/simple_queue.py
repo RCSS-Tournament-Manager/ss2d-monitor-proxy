@@ -18,3 +18,6 @@ class SimpleQueue(IQueue):
     
     def get_queue(self, i=0) -> 'SimpleQueue':
         return self
+    
+    def clear(self) -> None:
+        self.queue = asyncio.Queue()

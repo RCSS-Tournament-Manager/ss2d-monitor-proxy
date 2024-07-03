@@ -26,3 +26,6 @@ class DelayedQueue(IQueue):
     def get_queue(self, i=0) -> 'DelayedQueue':
         return self
     
+    def clear(self) -> None:
+        self.queue = SimpleQueue()
+    

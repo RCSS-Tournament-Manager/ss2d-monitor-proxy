@@ -21,9 +21,12 @@ from src.network.sender_rabbitmq import SenderRabbitMQ
 from src.network.sender_udp import SenderUDP
 from src.network.sender_web_socket import SenderWebSocket
 from src.network.simple_queue_batch import SimpleQueueBatch
+import logging
 
 STREAM_CONTEXTS = Union[RMQInfoContext, UDPInfoContext, WebSocketInfoContext]
 QUEUE_CONTEXTS = Union[DelayedQueueContext, SimpleQueueContext]
+
+logging = logging.getLogger('ProxyInfoContext')
 
 class ProxyInfoContext(BaseModel):
     input: STREAM_CONTEXTS = Field(..., description="The input stream context.", discriminator='type') # TODO Example
@@ -98,11 +101,13 @@ class ProxyInfoContext(BaseModel):
 
     @staticmethod
     def convert_inverse(proxy_info: list['ProxyInfoContext']) -> list[Proxy]:
+        logging.info(f'Converting inverse')
         proxies: Proxy = []
         for info in proxy_info:
             try:
                 info = ProxyInfoContext.model_validate(info.model_dump())
             except Exception as e:
+                logging.error(f"Error converting inverse: {e}")
                 return None
             
             receiver: IReceiver = None
@@ -137,4 +142,5 @@ class ProxyInfoContext(BaseModel):
             
             proxy = Proxy(receiver, senders, queue)
             proxies.append(proxy)
+            logging.debug(f'Converted inverse: {proxy.__dict__}')
         return proxies

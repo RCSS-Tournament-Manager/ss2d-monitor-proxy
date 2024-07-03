@@ -25,3 +25,6 @@ class IQueue:
     
     def get_type(self) -> QueueType:
         pass
+    
+    def clear(self) -> None:
+        pass

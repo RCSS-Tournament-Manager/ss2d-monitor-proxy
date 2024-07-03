@@ -16,6 +16,9 @@ class SimpleQueueBatch(IQueue):
             put_tasks.append(asyncio.create_task(self.queue[i].put(msg)))
             
         await asyncio.gather(*put_tasks)
+        
+    async def put_in_one(self, msg: str, i):
+        await self.queue[i].put(msg)
     
     async def get(self, i):
         return await self.queue[i].get()
@@ -28,3 +31,14 @@ class SimpleQueueBatch(IQueue):
     
     def get_type(self):
         return QueueType.SIMPLE
+    
+    def add_queue(self) -> IQueue:
+        self.queue.append(SimpleQueue())
+        return self.queue[-1]
+    
+    def clear(self) -> None:
+        for q in self.queue:
+            q.clear()
+            
+    def remove_queue(self, q: SimpleQueue) -> None:
+        self.queue.remove(q)

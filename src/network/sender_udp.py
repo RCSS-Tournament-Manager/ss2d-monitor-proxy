@@ -20,7 +20,6 @@ class SenderUDP(ISender): # TODO resend headers is not working
         self.new_connection_listener = None
 
     async def send(self) -> None:
-        self.logging.debug(f"Sending message to {self.address}")
         # dummy_sender_task = asyncio.create_task(self.send_dummy())
         try:
             msg = await self.queue.get()
@@ -56,8 +55,9 @@ class SenderUDP(ISender): # TODO resend headers is not working
                 self.logging.info("Monitor initialized")
                 self.address = new_address
                 # self.queue.clear()
-                for msg in self.parameters_messages.split('\n'):
-                    await self.queue.put(msg)
+                # for msg in self.parameters_messages.split('\n'):
+                #     self.logging.debug(f"Resending parameters message: {msg[:10]}")
+                #     await self.queue.put(msg)
 
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

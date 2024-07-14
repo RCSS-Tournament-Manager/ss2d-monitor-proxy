@@ -2,6 +2,24 @@
     "proxies": [
         {
             "input": {
+                "type": "WS",
+                "host": "localhost",
+                "port": 4000
+            },
+            "output": [
+                {
+                    "type": "UDP",
+                    "host": "localhost",
+                    "port": 6100
+                }
+            ],
+            "queue": {
+                "type": "SIMPLE",
+                "delay": 50
+            }
+        },
+        {
+            "input": {
                 "type": "UDP",
                 "host": "localhost",
                 "port": 6000
@@ -10,49 +28,12 @@
                 {
                     "type": "WS",
                     "host": "localhost",
-                    "port": 6300,
-                    "file_stream": null
+                    "port": 4000
                 }
             ],
             "queue": {
-                "type": "DELAYED",
+                "type": "SIMPLE",
                 "delay": 50
-            }
-        },
-        {
-            "input": {
-                "type": "WS",
-                "host": "localhost",
-                "port": 6300,
-                "file_stream": null
-            },
-            "output": [
-                {
-                    "type": "UDP",
-                    "host": "localhost",
-                    "port": 6400
-                }
-            ],
-            "queue": {
-                "type": "SIMPLE"
-            }
-        },
-        {
-            "input": {
-                "type": "WS",
-                "host": "localhost",
-                "port": 6300,
-                "file_stream": null
-            },
-            "output": [
-                {
-                    "type": "UDP",
-                    "host": "localhost",
-                    "port": 6500
-                }
-            ],
-            "queue": {
-                "type": "SIMPLE"
             }
         }
     ]

@@ -11,7 +11,11 @@ class SimpleQueue(IQueue):
         await self.queue.put(msg)
     
     async def get(self, i=0):
-        return await self.queue.get()
+        try:
+            return await self.queue.get()
+        except Exception as e:
+            logging.error(f"Error: {e}")
+            return None
     
     def size(self):
         return 1

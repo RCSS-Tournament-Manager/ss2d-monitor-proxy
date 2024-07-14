@@ -20,11 +20,18 @@ class SenderUDP(ISender): # TODO resend headers is not working
         self.new_connection_listener = None
 
     async def send(self) -> None:
-        dummy_sender_task = asyncio.create_task(self.send_dummy())
-        msg = await self.queue.get()
-        self.check_parameters(msg)
-        dummy_sender_task.cancel()
-        self.socket.sendto(msg.encode(), self.address)
+        self.logging.debug(f"Sending message to {self.address}")
+        # dummy_sender_task = asyncio.create_task(self.send_dummy())
+        try:
+            msg = await self.queue.get()
+            if msg is None:
+                return
+            self.check_parameters(msg)
+            # dummy_sender_task.cancel()
+            self.socket.sendto(msg.encode(), self.address)
+        except Exception as e:
+            self.logging.error(f"Error (TIMEOUT?!): {e}")
+            
         
     async def send_dummy(self) -> None:
         while True:
@@ -34,9 +41,11 @@ class SenderUDP(ISender): # TODO resend headers is not working
     async def wait_for_new_connection(self) -> None:
         self.logging.debug(f"Wainting for new connection at")
         while True:
+            self.logging.debug(f"Waiting for new connection at {self.address}")
             await asyncio.sleep(1)
             try:
                 msg, new_address = await asyncio.get_event_loop().run_in_executor(None, self.socket.recvfrom, UDP_BUFFER_SIZE)
+                self.logging.debug(f"******** Received message: {msg}")
             except socket.timeout:
                 continue
             
@@ -46,9 +55,8 @@ class SenderUDP(ISender): # TODO resend headers is not working
             elif msg.startswith('(dispinit'):
                 self.logging.info("Monitor initialized")
                 self.address = new_address
-                self.queue.clear()
+                # self.queue.clear()
                 for msg in self.parameters_messages.split('\n'):
-                    self.logging.info(f"Sending parameters message: {msg}")
                     await self.queue.put(msg)
 
     async def initialize(self, queue: IQueue) -> None:

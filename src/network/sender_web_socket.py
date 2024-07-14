@@ -27,7 +27,6 @@ class SenderWebSocket(ISender):
     async def initial_queue(self) -> IQueue:
         queue = self.shared_queue.add_queue()
         logging.info(f"Added queue")
-        logging.debug(f"sending parameters message to monitor: {self.parameters_messages}")
         await queue.put(self.parameters_messages)
         return queue
     

@@ -22,6 +22,8 @@ class Proxy:
         while True:
             send_tasks = []
             for sender in self.senders:
+                if sender.get_name() == 'UDP-localhost-6100':
+                    self.logging.info('Sending')
                 send_tasks.append(asyncio.create_task(sender.send()))
             await asyncio.gather(*send_tasks)
             # await asyncio.sleep(0.001) # TODO IS IT CORRECT?

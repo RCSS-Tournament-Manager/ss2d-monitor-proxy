@@ -17,8 +17,11 @@ class ISender(ICom):
         return "Sender"
     
     def check_parameters(self, msg: str) -> None:
+        if msg.startswith('(player_param'):
+            self.logging.info(f"Received server parameters message: RESETING")
+            self.parameters_messages = ''
         if any(msg.startswith(param) for param in PARAMETERS_INITIAL_MESSAGE):
-            self.logging.info(f"Received parameters message: {msg}")
+            self.logging.info(f"Received parameters message: {msg[:10]}")
             if self.parameters_messages != '':
                 self.parameters_messages += '\n'
             self.parameters_messages += msg

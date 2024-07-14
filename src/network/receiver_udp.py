@@ -24,9 +24,9 @@ class ReceiverUDP(IReceiver):
             await self.queue.put(msg.decode())
         except socket.timeout:
             self.logging.info(f"Timeout at {self.address}, retrying...")
-            dummy_sender_task = asyncio.create_task(self.send_dummy())
+            # dummy_sender_task = asyncio.create_task(self.send_dummy())
             await self.initialize(self.queue)
-            dummy_sender_task.cancel()
+            # dummy_sender_task.cancel()
     
     async def initialize(self, queue: IQueue) -> None:
         await super().initialize(queue)

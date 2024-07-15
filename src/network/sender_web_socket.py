@@ -27,7 +27,8 @@ class SenderWebSocket(ISender):
     async def initial_queue(self) -> IQueue:
         queue = self.shared_queue.add_queue()
         logging.info(f"Added queue")
-        await queue.put(self.parameters_messages)
+        for msg in self.parameters_messages.split('\n'):
+            await queue.put(msg)
         return queue
     
     async def sharing(self) -> None:

@@ -3,8 +3,8 @@
         {
             "input": {
                 "type": "WS",
-                "host": "localhost",
-                "port": 4000
+                "host": "130.61.27.103",
+                "port": 8080
             },
             "output": [
                 {
@@ -20,15 +20,15 @@
         },
         {
             "input": {
-                "type": "UDP",
-                "host": "localhost",
-                "port": 6000
+                "type": "WS",
+                "host": "130.61.75.212",
+                "port": 8080
             },
             "output": [
                 {
-                    "type": "WS",
+                    "type": "UDP",
                     "host": "localhost",
-                    "port": 4000
+                    "port": 6150
                 }
             ],
             "queue": {

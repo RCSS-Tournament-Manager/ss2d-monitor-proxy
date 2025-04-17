@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Annotated, Union
 from pydantic import BaseModel, Field
 
 from src.controller.context_model.delayed_queue_context import DelayedQueueContext
@@ -30,7 +30,7 @@ logging = logging.getLogger('ProxyInfoContext')
 
 class ProxyInfoContext(BaseModel):
     input: STREAM_CONTEXTS = Field(..., description="The input stream context.", discriminator='type') # TODO Example
-    output: list[STREAM_CONTEXTS] = Field(..., description="The output stream context.", discriminator='type') # TODO Example
+    output: list[Annotated[STREAM_CONTEXTS, Field(discriminator='type')]] = Field(..., description="The output stream context.")
     queue: QUEUE_CONTEXTS = Field(..., description="The queue context.") # TODO Example
     
     @staticmethod

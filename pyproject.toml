@@ -1,0 +1,11 @@
+[project]
+name = "ss2d-monitor-proxy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aio-pika==9.4.1",
+    "colorlog==6.8.2",
+    "fastapi==0.111.0",
+]
